@@ -4,8 +4,7 @@
   "description": "答案之书 - 小红书付费版",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "gen-codes": "node scripts/gen-codes.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
