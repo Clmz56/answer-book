@@ -63,8 +63,15 @@ body::before {
   font-size: 2.2rem;
   font-weight: 400;
   letter-spacing: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0.8rem;
   text-shadow: 0 0 20px rgba(201,168,76,0.3);
+}
+
+.en-subtitle {
+  font-size: 0.7rem;
+  color: #4a4020;
+  letter-spacing: 0.3rem;
+  margin-bottom: 2rem;
 }
 
 .intro p {
@@ -255,9 +262,11 @@ body::before {
   <!-- 首页 -->
   <div id="introPage" class="intro">
     <h1>答 案 之 书</h1>
+    <div class="en-subtitle">THE BOOK OF ANSWERS</div>
     <p id="introText">
-      心中默念你最近困惑的问题<br>
-      专注10秒<br>
+      心中有惑 翻开即解<br>
+      412页人生答案 随时指引<br>
+      默念你的问题 专注10秒<br>
       然后输入你的访问码
     </p>
     <div class="input-area">
@@ -325,7 +334,7 @@ async function verifyCode() {
 // 验证通过后：将输入区切换为数字输入
 function showIntroAsNumberInput() {
   document.getElementById('introText').innerHTML =
-    '心中默念你最近困惑的问题<br>专注10秒<br>然后输入一个数字';
+    '心中有惑 翻开即解<br>412页人生答案 随时指引<br>默念你的问题 专注10秒<br>然后输入一个数字';
   var area = document.querySelector('.input-area');
   area.innerHTML =
     '<input type="number" id="pageInput" min="1" max="412" placeholder="1–412">' +
