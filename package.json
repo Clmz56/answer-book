@@ -1,0 +1,17 @@
+{
+  "name": "answer-book",
+  "version": "1.0.0",
+  "description": "答案之书 - 小红书付费版",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "gen-codes": "node scripts/gen-codes.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

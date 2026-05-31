@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 1080px;
+  height: 1440px;
+  background: #3a2c1a;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  color: #FFFFFF;
+}
+body::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
+  z-index: 0;
+}
+
+.ornament-top {
+  position: relative;
+  z-index: 1;
+  font-size: 24px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 16px;
+  margin-top: 100px;
+  margin-bottom: 50px;
+}
+
+h2 {
+  position: relative;
+  z-index: 1;
+  font-size: 56px;
+  font-weight: 900;
+  letter-spacing: 16px;
+  margin-bottom: 70px;
+}
+
+.scenes {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 0 80px;
+  width: 100%;
+}
+
+.scene-card {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.scene-emoji {
+  font-size: 44px;
+  flex-shrink: 0;
+}
+
+.scene-info {
+  flex: 1;
+}
+
+.scene-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: 2px;
+}
+
+.scene-desc {
+  font-size: 20px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.5;
+}
+
+.scene-answer {
+  font-size: 18px;
+  color: rgba(255,255,255,0.3);
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.bottom-text {
+  position: absolute;
+  bottom: 80px;
+  font-size: 20px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 6px;
+  z-index: 1;
+}
+</style>
+</head>
+<body>
+
+<div class="ornament-top">✦ ✦ ✦</div>
+<h2>适 用 场 景</h2>
+
+<div class="scenes">
+  <div class="scene-card">
+    <div class="scene-emoji">💔</div>
+    <div class="scene-info">
+      <div class="scene-title">感情困惑</div>
+      <div class="scene-desc">该不该表白？要不要继续？</div>
+      <div class="scene-answer">"相信你的直觉"</div>
+    </div>
+  </div>
+  <div class="scene-card">
+    <div class="scene-emoji">💼</div>
+    <div class="scene-info">
+      <div class="scene-title">职场抉择</div>
+      <div class="scene-desc">跳不跳槽？接不接offer？</div>
+      <div class="scene-answer">"时机已到 果断行动"</div>
+    </div>
+  </div>
+  <div class="scene-card">
+    <div class="scene-emoji">💰</div>
+    <div class="scene-info">
+      <div class="scene-title">投资决策</div>
+      <div class="scene-desc">买不买？卖不卖？</div>
+      <div class="scene-answer">"不要犹豫"</div>
+    </div>
+  </div>
+  <div class="scene-card">
+    <div class="scene-emoji">🎓</div>
+    <div class="scene-info">
+      <div class="scene-title">人生方向</div>
+      <div class="scene-desc">考研还是工作？留在大城市还是回家？</div>
+      <div class="scene-answer">"答案就在你身边"</div>
+    </div>
+  </div>
+  <div class="scene-card">
+    <div class="scene-emoji">🌙</div>
+    <div class="scene-info">
+      <div class="scene-title">深夜emo</div>
+      <div class="scene-desc">睡不着 想太多 需要一个答案</div>
+      <div class="scene-answer">"一切都会好的"</div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-text">412页答案 总有一页属于你</div>
+</body>
+</html>

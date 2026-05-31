@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>答案之书</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  background: #0a0a0f;
+  color: #c9a84c;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 星空背景 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(1px 1px at 10% 20%, rgba(201,168,76,0.4), transparent),
+    radial-gradient(1px 1px at 30% 60%, rgba(201,168,76,0.3), transparent),
+    radial-gradient(1px 1px at 50% 10%, rgba(201,168,76,0.5), transparent),
+    radial-gradient(1px 1px at 70% 80%, rgba(201,168,76,0.3), transparent),
+    radial-gradient(1px 1px at 90% 40%, rgba(201,168,76,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 20% 90%, rgba(201,168,76,0.2), transparent),
+    radial-gradient(1.5px 1.5px at 60% 30%, rgba(201,168,76,0.2), transparent),
+    radial-gradient(1px 1px at 80% 70%, rgba(201,168,76,0.3), transparent),
+    radial-gradient(1px 1px at 40% 50%, rgba(201,168,76,0.2), transparent),
+    radial-gradient(1px 1px at 15% 75%, rgba(201,168,76,0.3), transparent);
+  z-index: 0;
+  animation: twinkle 8s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  max-width: 480px;
+  width: 100%;
+}
+
+/* 首页 */
+.intro {
+  animation: fadeIn 1.5s ease;
+}
+
+.intro h1 {
+  font-size: 2.2rem;
+  font-weight: 400;
+  letter-spacing: 0.5rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 20px rgba(201,168,76,0.3);
+}
+
+.intro p {
+  font-size: 1rem;
+  color: #8a7a4a;
+  line-height: 2;
+  margin-bottom: 2.5rem;
+}
+
+.intro .step {
+  color: #a08a3a;
+  font-size: 0.9rem;
+}
+
+/* 输入区域 */
+.input-area {
+  margin-top: 2rem;
+}
+
+.input-area input {
+  background: transparent;
+  border: 1px solid #3a3520;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.5rem;
+  color: #c9a84c;
+  text-align: center;
+  width: 160px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.input-area input::placeholder {
+  color: #4a4020;
+  font-size: 1rem;
+}
+
+.input-area input:focus {
+  border-color: #c9a84c;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.8rem 2rem;
+  background: transparent;
+  border: 1px solid #c9a84c;
+  color: #c9a84c;
+  font-size: 1rem;
+  font-family: inherit;
+  letter-spacing: 0.3rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  background: rgba(201,168,76,0.1);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-random {
+  margin-top: 1rem;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.85rem;
+  border-color: #5a5030;
+  color: #8a7a4a;
+}
+
+/* 答案页 */
+.answer-page {
+  display: none;
+  animation: bookFlip 0.8s ease;
+}
+
+.answer-page.show {
+  display: block;
+}
+
+@keyframes bookFlip {
+  0% { transform: rotateY(90deg); opacity: 0; }
+  50% { transform: rotateY(-5deg); opacity: 0.8; }
+  100% { transform: rotateY(0deg); opacity: 1; }
+}
+
+.page-number {
+  font-size: 0.85rem;
+  color: #5a5030;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.2rem;
+}
+
+.answer-text {
+  font-size: 2rem;
+  line-height: 1.8;
+  margin: 2rem 0;
+  text-shadow: 0 0 30px rgba(201,168,76,0.2);
+  min-height: 4rem;
+}
+
+.divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #c9a84c, transparent);
+  margin: 1.5rem auto;
+}
+
+.actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(201,168,76,0.15);
+  border: 1px solid #3a3520;
+  color: #c9a84c;
+  padding: 0.6rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 10;
+}
+
+.toast.show {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 首页 -->
+  <div id="introPage" class="intro">
+    <h1>答 案 之 书</h1>
+    <p>
+      心中默念你最近困惑的问题<br>
+      专注10秒<br>
+      然后输入一个数字
+    </p>
+    <div class="input-area">
+      <input type="number" id="pageInput" min="1" max="412" placeholder="1–412">
+      <br>
+      <button class="btn" onclick="goToPage()">翻 开</button>
+      <br>
+      <button class="btn btn-random" onclick="randomPage()">随 机 翻 页</button>
+    </div>
+  </div>
+
+  <!-- 答案页 -->
+  <div id="answerPage" class="answer-page">
+    <div class="page-number" id="pageNum"></div>
+    <div class="divider"></div>
+    <div class="answer-text" id="answerText"></div>
+    <div class="divider"></div>
+    <div class="actions">
+      <button class="btn btn-random" onclick="randomPage()">再翻一次</button>
+      <button class="btn btn-random" onclick="goHome()">重新提问</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ANSWERS = ["寻求更多的选择", "不", "别忽视显而易见的东西", "结果可能令人吃惊", "有决心就能成功", "做一次改变", "照别人告诉你的去做", "不能保证", "答案可能会以另一种形式出現", "毫无疑问", "这樣做会使事情变得有趣", "这是肯定的", "有可能会伤害到他人", "全身心投入将贏得好结果", "采取冒险的态度", "最好等待", "可能会惹上麻煩", "你需要采取主动", "似乎没问题", "当然", "不要在意", "尽早做好它", "你终会发現你想知道的一切", "除非你独自一人", "是，但不要强求", "你需要去适應", "明天再来試試", "以更放松的态度去面对", "你需要考慮其他方法", "在習慣中接受一些改变", "要知道选择太多和选择太少一樣很难", "别浪费时間了", "是", "花更多时間来决定", "灵活應对", "似乎已成事实", "看开一点", "问问你的异性同事", "柳暗花明又一村", "你会后悔的", "避免第一个解决办法", "随它去吧", "过段时間就不那麽重要了", "拭目以待", "相信你最初的想法", "请不要抗拒", "这会带来好运", "那一定很棒", "把它记下来", "可能发生小意外", "学習並享受它", "这具有重要意義", "防备意外发生", "一切将依赖于你的选择", "转移注意力", "离开", "你需要其他人的幫助", "这有些特别", "不要猶豫", "先完成其他事", "給自己一点时間", "現在你就能", "那不值得糾结", "那将影响别人对你的看法", "照别人说的去做", "转移你的注意力", "你会失望的", "最好关注你的工作", "形式尚不明朗", "不要抱有成见", "你必须現在就行动", "那可能很难，但值得", "付出就会有回報", "对意外要有思想准备", "更细心地去傾聽，你就会知道", "且行且思", "你有能力以任何方式改善", "这是你不会忘记的事物", "履行你的義務", "快刀斬亂麻", "别在这上面下賭注", "也许吧", "專注于你的家庭生活", "絕对不", "等待", "别犯傻了", "可能吧", "表示懷疑", "意義非凡", "那可能非同寻常", "不可能失敗", "你需要了解更多", "情況很快就会有变化", "这並不重要", "順其自然", "问问你最好的朋友", "这时不要再自找麻煩", "晚一点处理", "嘗試一种更可能的解决方案", "先做重要的事", "投硬币来做决定吧", "这也取决于另一种情況", "你最终能如愿", "可行", "答案就在你家窗外", "現在的你比以往任何时候都清楚", "只需说声謝謝", "或许，等你再年长些就明白了", "这将轟动一时", "放手一搏", "事情会朝目标发展", "更细心去了解，你就知道该怎麽做了", "需要做更多的努力", "等待一个更好的机会", "数到5，再試一次", "你不得不妥協", "很快就能解决", "十分确定", "这还不确定", "謹慎处理", "全力以赴", "重新考慮你的做法", "问问你的母亲吧", "如果你独自一人就不要", "无需担忧", "保持开放的心态", "你会为自己所做的感到高兴的", "发揮你的想象力", "獻出你的一切", "順从你的意愿", "先做好自己的事", "不要懷疑", "是时候做新打算了​", "省省力气吧", "合作将是关鍵", "此时不宜", "把这看做一次机会", "莫等待", "你可能不得不放棄其他东西", "遵守规則", "相关问题可能会出現", "事情将如你所愿", "賭一把", "以后再处理", "结果是樂观的", "期待解决", "注意细节", "你的行动会使一切变好", "答案就在公園里", "消除你自身的障礙", "这是不明智的", "将需要大量的努力", "不要勉强自己", "是时候做打算了", "别再猶豫了", "享受这次体验", "要付出堅持不懈的努力", "那仍旧无法预測", "毋庸置疑", "多花点时間来做决定", "只做这一次", "做些改变", "先做好其他事", "不要陷入到情緒之中", "相信你的直觉", "采纳智者的建议", "情況不明了", "列出否定的理由", "要有耐心", "一笑置之", "继续", "你必须随机應变", "别忘记享受樂趣", "那是在浪费金錢", "重要的优先", "为了做出最好的决定，務必保持冷静", "嘗試一个更没把握的方法", "清除你自身的障礙", "那可能已成事实", "保守你的秘密", "你必须马上行动", "不要妄下賭注", "那可能已无法改变", "一些幫助能确保你成功", "你肯定会获得支持", "只做一次", "遵循智者的建议", "如你所愿", "当局者迷", "无论你怎麽做，结果依旧", "先主后次", "这会让你付出代价​​​", "尽早行动", "寻求更多选择", "你現在比以往任何时候都清楚", "极可能发生事故", "带着好奇去探索", "列出这樣做的理由", "马上停下来", "这不是很确定", "不用担心", "不要告诉别人", "那将是一件樂事", "不要迫于压力草率行事", "不要等待", "你能以任何方式改善現状", "你会为此感到高兴", "放棄之前的想法", "你不会忘记这些", "謹慎对待", "放棄你現在的想法", "有理由保持樂观", "你会发現自己难以妥協", "改变不会很快发生", "有些障礙需要克服", "耐心点", "果断放棄", "最好把心思放在工作上", "要做就做好，否則就不要去做", "深表懷疑", "最好的解决方法可能不太明显", "已超出你的控制", "看看会发生什麽", "你需要更多信息", "开闊视野", "看得更清楚些", "结果可能会令人震惊", "节省你的精力吧", "管它呢", "无论你做什麽，结果依旧", "那将引起一些紛争", "相关问题可能会浮出水面", "遵循其他人的建议", "改变将不会很快发生​​​", "值得付出努力", "負起责任来", "不值得一争", "问问你的父亲吧", "向别人傾诉", "看起来还行", "絕不", "等待一个更好的提议", "你可能会遭遇反对", "告诉某人那对你意味着什麽", "一切都取决于你的选择", "把这看作一个时机", "不要陷入你的情緒", "你一定得这麽做", "享受这个过程", "不识廬山真面目，只緣身在此山中", "你不会失望的", "是时候走了", "欣然接受", "遵循其他人的意见", "说出来吧", "慷慨大度一些", "你可能遭遇反对", "你能否不要抗拒", "要障礙需要克服", "做出改变", "无法保证", "算了吧", "合作是关鍵", "走到室外呼吸新鲜空气", "換个咖啡店再想想", "在日落前做完它", "把问题写在便利貼貼门口", "邀请朋友一起讨论", "打电话給很久没联絡的人", "到圖书馆寻找灵感", "留意梦里的訊息", "聽一首老歌会給你答案", "去公園散步时再决定", "把选项画成流程圖", "嘗試把问题说成一句玩笑", "給未来的自己写封信", "把手机放下三十分钟", "換个角度坐下来看", "问问路人", "找个安静的角落冥想", "在路口左转之后再决定", "查查看天气预報", "买张小车票，路上想", "先吃点甜的", "多睡一会儿再答", "打掃你的桌面", "換一盞灯光", "嘗試星期二再做", "在星空下说出你的愿望", "把它写成待办列表的第一项", "说出三个感恩的事", "对着鏡子说出答案", "向植物傾诉", "学会说不", "接受别人的好意", "現在就说出你的想法", "表達你的感激", "你的行动会改善現状", "别指望了", "采取冒险的态度", "聽从專家的建议", "你可能会发現自己无法妥協", "调查清楚，然后享受它", "絕对是", "你可能会遇到反对", "它将保持不可预測", "你需要采取主动", "把它视为一个机会", "深思熟慮", "絕对不是", "带着頑皮的好奇心去探索", "也许等你长大一点", "愉快地确信它", "重新排列重要事项的优先順序", "看起来是确定的", "为它创造更多空間", "儘早做", "保守秘密", "让自己先休息一下", "这是明智的", "你得见机行事", "结果可能会发生令人震惊的事件", "答案可能会以另一种语言出現", "值得懷疑", "这可能具有挑战性，但你会发現其中的价值", "你会发現你需要知道的一切", "这与另一种情況有实质性的联繫", "观察並看看会发生什麼", "你現在比以往任何时候都更清楚", "这会影响别人对你的看法", "重新考慮你的方法", "你会很高兴你这麼做了", "白紙黑字写下来", "目前不利", "这不是一件可以掉以轻心的事情", "尽你所能去升級", "如果你照着吩咐去做", "如果做得好就行；如果做不好，就别做", "現在不要要求更多", "避免第一个解决方案", "你将拥有最终决定权", "以更轻鬆的步伐前进", "最好的解决方案可能不是显而易见的那个", "保持灵活", "带头", "深思熟慮地选择你的措辭", "你可能堅持着一个过时的理想", "可能会有一番掙扎", "你将拥有你需要的熱情", "只要你说「謝謝」", "享受这个经历", "謹慎行事", "做你自己最好的拥护者", "为别人感到高兴", "走路要小心", "大声说出来", "别猶豫", "这是制定新计劃的好时机", "继续前进", "堅定的承諾将带来好的结果", "这可能不合邏輯", "没有保证", "情況可能会变化得很快", "别被情緒左右", "这很重要", "列出「为什麼不」的清单", "别等了", "慢慢来", "有充分的理由保持樂观", "这是一件你不会忘记的事", "稍后再处理", "向值得信赖的知己透露你的想法", "跟随别人的腳步", "列出「为什麼」的清单", "冒险一試", "寻求幫助", "知道什麼时候该离开", "接受日常生活的改变", "你将不得不妥協", "你需要更多资訊", "寻找阻力最小的路徑", "这会引起轟动", "你将克服任何障礙", "最好專注于你的工作", "这将是一种樂趣", "慷慨一点", "好事正在找上你", "别留遺憾", "做出贡獻", "发生意外的可能性很高", "寻求了结", "意识到选择太多可能和选择太少一樣困难", "仔细聽；然后你就会知道", "答案就在你身边", "让你的情緒引导你", "别人将取决于你的选择", "放手吧", "是你该离开的时候了", "别分心", "你其实不在乎", "一年后这就不重要了", "这可能是非凡的", "数到十；再问一次", "表現得好像它已经成真了一樣", "设定优先順序将是过程中的必要部分", "发揮你的想像力", "这会很棒的", "为了确保做出最好的决定，保持冷静", "遵循指示", "寻找可能隱藏的东西", "别錯过机会", "问你父亲"];
+
+function showPage(num) {
+  if (num < 1 || num > 412) {
+    showToast('请输入 1–412 之间的数字');
+    return;
+  }
+  const answer = ANSWERS[num - 1];
+  document.getElementById('pageNum').textContent = '— 第 ' + num + ' 页 —';
+  document.getElementById('answerText').textContent = answer;
+  document.getElementById('introPage').style.display = 'none';
+  const ap = document.getElementById('answerPage');
+  ap.classList.remove('show');
+  // Force reflow for animation restart
+  void ap.offsetWidth;
+  ap.classList.add('show');
+  // Update URL
+  history.pushState({page: num}, '', '?p=' + num);
+}
+
+function goToPage() {
+  const input = document.getElementById('pageInput');
+  const num = parseInt(input.value);
+  if (isNaN(num)) {
+    showToast('请输入一个数字');
+    return;
+  }
+  showPage(num);
+}
+
+function randomPage() {
+  const num = Math.floor(Math.random() * 412) + 1;
+  showPage(num);
+}
+
+function goHome() {
+  document.getElementById('answerPage').classList.remove('show');
+  document.getElementById('introPage').style.display = '';
+  document.getElementById('pageInput').value = '';
+  history.pushState({}, '', window.location.pathname);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// Enter key
+document.getElementById('pageInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') goToPage();
+});
+
+// URL params
+const params = new URLSearchParams(window.location.search);
+const p = parseInt(params.get('p'));
+if (p >= 1 && p <= 412) {
+  showPage(p);
+}
+
+// Back button
+window.addEventListener('popstate', function(e) {
+  if (e.state && e.state.page) {
+    const num = e.state.page;
+    document.getElementById('pageNum').textContent = '— 第 ' + num + ' 页 —';
+    document.getElementById('answerText').textContent = ANSWERS[num - 1];
+    document.getElementById('introPage').style.display = 'none';
+    document.getElementById('answerPage').classList.add('show');
+  } else {
+    document.getElementById('answerPage').classList.remove('show');
+    document.getElementById('introPage').style.display = '';
+  }
+});
+</script>
+
+</body>
+</html>
