@@ -33,9 +33,9 @@ app.get('/api/verify', (req, res) => {
   return res.json({ valid: false, message: '访问码无效' });
 });
 
-// 根路径 -> gate 页
+// 根路径 -> 主页面
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'gate.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {

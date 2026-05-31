@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>答案之书</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  background: #0a0a0f;
+  color: #c9a84c;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 星空背景 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(1px 1px at 10% 20%, rgba(201,168,76,0.4), transparent),
+    radial-gradient(1px 1px at 30% 60%, rgba(201,168,76,0.3), transparent),
+    radial-gradient(1px 1px at 50% 10%, rgba(201,168,76,0.5), transparent),
+    radial-gradient(1px 1px at 70% 80%, rgba(201,168,76,0.3), transparent),
+    radial-gradient(1px 1px at 90% 40%, rgba(201,168,76,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 20% 90%, rgba(201,168,76,0.2), transparent),
+    radial-gradient(1.5px 1.5px at 60% 30%, rgba(201,168,76,0.2), transparent),
+    radial-gradient(1px 1px at 80% 70%, rgba(201,168,76,0.3), transparent),
+    radial-gradient(1px 1px at 40% 50%, rgba(201,168,76,0.2), transparent),
+    radial-gradient(1px 1px at 15% 75%, rgba(201,168,76,0.3), transparent);
+  z-index: 0;
+  animation: twinkle 8s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  max-width: 480px;
+  width: 100%;
+}
+
+/* 首页 */
+.intro {
+  animation: fadeIn 1.5s ease;
+}
+
+.intro h1 {
+  font-size: 2.2rem;
+  font-weight: 400;
+  letter-spacing: 0.5rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 20px rgba(201,168,76,0.3);
+}
+
+.intro p {
+  font-size: 1rem;
+  color: #8a7a4a;
+  line-height: 2;
+  margin-bottom: 2.5rem;
+}
+
+.intro .step {
+  color: #a08a3a;
+  font-size: 0.9rem;
+}
+
+/* 输入区域 */
+.input-area {
+  margin-top: 2rem;
+}
+
+.input-area input {
+  background: transparent;
+  border: 1px solid #3a3520;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.5rem;
+  color: #c9a84c;
+  text-align: center;
+  width: 200px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.3s;
+  letter-spacing: 0.2rem;
+}
+
+.input-area input::placeholder {
+  color: #4a4020;
+  font-size: 1rem;
+  letter-spacing: 0.1rem;
+}
+
+.input-area input:focus {
+  border-color: #c9a84c;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.8rem 2rem;
+  background: transparent;
+  border: 1px solid #c9a84c;
+  color: #c9a84c;
+  font-size: 1rem;
+  font-family: inherit;
+  letter-spacing: 0.3rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  background: rgba(201,168,76,0.1);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-random {
+  margin-top: 1rem;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.85rem;
+  border-color: #5a5030;
+  color: #8a7a4a;
+}
+
+/* 答案页 */
+.answer-page {
+  display: none;
+  animation: bookFlip 0.8s ease;
+}
+
+.answer-page.show {
+  display: block;
+}
+
+@keyframes bookFlip {
+  0% { transform: rotateY(90deg); opacity: 0; }
+  50% { transform: rotateY(-5deg); opacity: 0.8; }
+  100% { transform: rotateY(0deg); opacity: 1; }
+}
+
+.page-number {
+  font-size: 0.85rem;
+  color: #5a5030;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.2rem;
+}
+
+.answer-text {
+  font-size: 2rem;
+  line-height: 1.8;
+  margin: 2rem 0;
+  text-shadow: 0 0 30px rgba(201,168,76,0.2);
+  min-height: 4rem;
+}
+
+.divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #c9a84c, transparent);
+  margin: 1.5rem auto;
+}
+
+.actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(201,168,76,0.15);
+  border: 1px solid #3a3520;
+  color: #c9a84c;
+  padding: 0.6rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 10;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+.toast.error {
+  color: #a04040;
+  border-color: #402020;
+  background: rgba(160,64,64,0.15);
+}
+
+/* 加载中 */
+.loading {
+  position: relative;
+  z-index: 1;
+}
+
+.loading .spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(201,168,76,0.15);
+  border-top-color: #c9a84c;
+  border-radius: 50%;
+  margin: 0 auto 0.8rem;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 隐藏 */
+.hidden {
+  display: none !important;
+}
+</style>
+</head>
+<body>
+
+<!-- 加载中 -->
+<div id="loadingEl" class="loading hidden">
+  <div class="spinner"></div>
+</div>
+
+<div class="container">
+  <!-- 首页 -->
+  <div id="introPage" class="intro">
+    <h1>答 案 之 书</h1>
+    <p id="introText">
+      心中默念你最近困惑的问题<br>
+      专注10秒<br>
+      然后输入你的访问码
+    </p>
+    <div class="input-area">
+      <input type="text" id="codeInput" maxlength="6" placeholder="输入访问码" autocomplete="off" autocorrect="off" autocapitalize="characters">
+      <br>
+      <button class="btn" id="submitBtn" onclick="verifyCode()">翻 开</button>
+    </div>
+  </div>
+
+  <!-- 答案页 -->
+  <div id="answerPage" class="answer-page">
+    <div class="page-number" id="pageNum"></div>
+    <div class="divider"></div>
+    <div class="answer-text" id="answerText"></div>
+    <div class="divider"></div>
+    <div class="actions">
+      <button class="btn btn-random" onclick="randomPage()">再翻一次</button>
+      <button class="btn btn-random" onclick="goHome()">重新提问</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ANSWERS = ["寻求更多的选择", "不", "别忽视显而易见的东西", "结果可能令人吃惊", "有决心就能成功", "做一次改变", "照别人告诉你的去做", "不能保证", "答案可能会以另一种形式出现", "毫无疑问", "这样做会使事情变得有趣", "这是肯定的", "有可能会伤害到他人", "全身心投入将赢得好结果", "采取冒险的态度", "最好等待", "可能会惹上麻烦", "你需要采取主动", "似乎没问题", "当然", "不要在意", "尽早做好它", "你终会发现你想知道的一切", "除非你独自一人", "是，但不要强求", "你需要去适应", "明天再来试试", "以更放松的态度去面对", "你需要考虑其他方法", "在习惯中接受一些改变", "要知道选择太多和选择太少一样很难", "别浪费时间了", "是", "花更多时间来决定", "灵活应对", "似乎已成事实", "看开一点", "问问你的异性同事", "柳暗花明又一村", "你会后悔的", "避免第一个解决办法", "随它去吧", "过段时间就不那么重要了", "拭目以待", "相信你最初的想法", "请不要抗拒", "这会带来好运", "那一定很棒", "把它记下来", "可能发生小意外", "学习并享受它", "这具有重要意义", "防备意外发生", "一切将依赖于你的选择", "转移注意力", "离开", "你需要其他人的帮助", "这有些特别", "不要犹豫", "先完成其他事", "给自己一点时间", "现在你就能", "那不值得纠结", "那将影响别人对你的看法", "照别人说的去做", "转移你的注意力", "你会失望的", "最好关注你的工作", "形式尚不明朗", "不要抱有成见", "你必须现在就行动", "那可能很难，但值得", "付出就会有回报", "对意外要有思想准备", "更细心地去倾听，你就会知道", "且行且思", "你有能力以任何方式改善", "这是你不会忘记的事物", "履行你的义务", "快刀斩乱麻", "别在这上面下赌注", "也许吧", "专注于你的家庭生活", "绝对不", "等待", "别犯傻了", "可能吧", "表示怀疑", "意义非凡", "那可能非同寻常", "不可能失败", "你需要了解更多", "情况很快就会有变化", "这并不重要", "顺其自然", "问问你最好的朋友", "这时不要再自找麻烦", "晚一点处理", "尝试一种更可能的解决方案", "先做重要的事", "投硬币来做决定吧", "这也取决于另一种情况", "你最终能如愿", "可行", "答案就在你家窗外", "现在的你比以往任何时候都清楚", "只需说声谢谢", "或许，等你再年长些就明白了", "这将轰动一时", "放手一搏", "事情会朝目标发展", "更细心去了解，你就知道该怎么做了", "需要做更多的努力", "等待一个更好的机会", "数到5，再试一次", "你不得不妥协", "很快就能解决", "十分确定", "这还不确定", "谨慎处理", "全力以赴", "重新考虑你的做法", "问问你的母亲吧", "如果你独自一人就不要", "无需担忧", "保持开放的心态", "你会为自己所做的感到高兴的", "发挥你的想象力", "献出你的一切", "顺从你的意愿", "先做好自己的事", "不要怀疑", "是时候做新打算了​", "省省力气吧", "合作将是关键", "此时不宜", "把这看做一次机会", "莫等待", "你可能不得不放弃其他东西", "遵守规则", "相关问题可能会出现", "事情将如你所愿", "赌一把", "以后再处理", "结果是乐观的", "期待解决", "注意细节", "你的行动会使一切变好", "答案就在公园里", "消除你自身的障碍", "这是不明智的", "将需要大量的努力", "不要勉强自己", "是时候做打算了", "别再犹豫了", "享受这次体验", "要付出坚持不懈的努力", "那仍旧无法预测", "毋庸置疑", "多花点时间来做决定", "只做这一次", "做些改变", "先做好其他事", "不要陷入到情绪之中", "相信你的直觉", "采纳智者的建议", "情况不明了", "列出否定的理由", "要有耐心", "一笑置之", "继续", "你必须随机应变", "别忘记享受乐趣", "那是在浪费金钱", "重要的优先", "为了做出最好的决定，务必保持冷静", "尝试一个更没把握的方法", "清除你自身的障碍", "那可能已成事实", "保守你的秘密", "你必须马上行动", "不要妄下赌注", "那可能已无法改变", "一些帮助能确保你成功", "你肯定会获得支持", "只做一次", "遵循智者的建议", "如你所愿", "当局者迷", "无论你怎么做，结果依旧", "先主后次", "这会让你付出代价​​​", "尽早行动", "寻求更多选择", "你现在比以往任何时候都清楚", "极可能发生事故", "带着好奇去探索", "列出这样做的理由", "马上停下来", "这不是很确定", "不用担心", "不要告诉别人", "那将是一件乐事", "不要迫于压力草率行事", "不要等待", "你能以任何方式改善现状", "你会为此感到高兴", "放弃之前的想法", "你不会忘记这些", "谨慎对待", "放弃你现在的想法", "有理由保持乐观", "你会发现自己难以妥协", "改变不会很快发生", "有些障碍需要克服", "耐心点", "果断放弃", "最好把心思放在工作上", "要做就做好，否则就不要去做", "深表怀疑", "最好的解决方法可能不太明显", "已超出你的控制", "看看会发生什么", "你需要更多信息", "开阔视野", "看得更清楚些", "结果可能会令人震惊", "节省你的精力吧", "管它呢", "无论你做什么，结果依旧", "那将引起一些纷争", "相关问题可能会浮出水面", "遵循其他人的建议", "改变将不会很快发生​​​", "值得付出努力", "负起责任来", "不值得一争", "问问你的父亲吧", "向别人倾诉", "看起来还行", "绝不", "等待一个更好的提议", "你可能会遭遇反对", "告诉某人那对你意味着什么", "一切都取决于你的选择", "把这看作一个时机", "不要陷入你的情绪", "你一定得这么做", "享受这个过程", "不识庐山真面目，只缘身在此山中", "你不会失望的", "是时候走了", "欣然接受", "遵循其他人的意见", "说出来吧", "慷慨大度一些", "你可能遭遇反对", "你能否不要抗拒", "有障碍需要克服", "做出改变", "无法保证", "算了吧", "合作是关键", "走到室外呼吸新鲜空气", "换个咖啡店再想想", "在日落前做完它", "把问题写在便利贴贴门口", "邀请朋友一起讨论", "打电话给很久没联络的人", "到图书馆寻找灵感", "留意梦里的讯息", "听一首老歌会给你答案", "去公园散步时再决定", "把选项画成流程图", "尝试把问题说成一句玩笑", "给未来的自己写封信", "把手机放下三十分钟", "换个角度坐下来看", "问问路人", "找个安静的角落冥想", "在路口左转之后再决定", "查查看天气预报", "买张小车票，路上想", "先吃点甜的", "多睡一会儿再答", "打扫你的桌面", "换一盏灯光", "尝试星期二再做", "在星空下说出你的愿望", "把它写成待办列表的第一项", "说出三个感恩的事", "对着镜子说出答案", "向植物倾诉", "学会说不", "接受别人的好意", "现在就说出你的想法", "表达你的感激", "你的行动会改善现状", "别指望了", "采取冒险的态度", "听从专家的建议", "你可能会发现自己无法妥协", "调查清楚，然后享受它", "绝对是", "你可能会遇到反对", "它将保持不可预测", "你需要采取主动", "把它视为一个机会", "深思熟虑", "绝对不是", "带着顽皮的好奇心去探索", "也许等你长大一点", "愉快地确信它", "重新排列重要事项的优先顺序", "看起来是确定的", "为它创造更多空间", "尽早做", "保守秘密", "让自己先休息一下", "这是明智的", "你得见机行事", "结果可能会发生令人震惊的事件", "答案可能会以另一种语言出现", "值得怀疑", "这可能具有挑战性，但你会发现其中的价值", "你会发现你需要知道的一切", "这与另一种情况有实质性的联系", "观察并看看会发生什么", "你现在比以往任何时候都更清楚", "这会影响别人对你的看法", "重新考虑你的方法", "你会很高兴你这么做了", "白纸黑字写下来", "目前不利", "这不是一件可以掉以轻心的事情", "尽你所能去升级", "如果你照着吩咐去做", "如果做得好就行；如果做不好，就别做", "现在不要要求更多", "避免第一个解决方案", "你将拥有最终决定权", "以更轻松的步伐前进", "最好的解决方案可能不是显而易见的那个", "保持灵活", "带头", "深思熟虑地选择你的措辞", "你可能坚持着一个过时的理想", "可能会有一番挣扎", "你将拥有你需要的热情", "只要你说「谢谢」", "享受这个经历", "谨慎行事", "做你自己最好的拥护者", "为别人感到高兴", "走路要小心", "大声说出来", "别犹豫", "这是制定新计划的好时机", "继续前进", "坚定的承诺将带来好的结果", "这可能不合逻辑", "没有保证", "情况可能会变化得很快", "别被情绪左右", "这很重要", "列出「为什么不」的清单", "别等了", "慢慢来", "有充分的理由保持乐观", "这是一件你不会忘记的事", "稍后再处理", "向值得信赖的知己透露你的想法", "跟随别人的脚步", "列出「为什么」的清单", "冒险一试", "寻求帮助", "知道什么时候该离开", "接受日常生活的改变", "你将不得不妥协", "你需要更多资讯", "寻找阻力最小的路径", "这会引起轰动", "你将克服任何障碍", "最好专注于你的工作", "这将是一种乐趣", "慷慨一点", "好事正在找上你", "别留遗憾", "做出贡献", "发生意外的可能性很高", "寻求了结", "意识到选择太多可能和选择太少一样困难", "仔细听；然后你就会知道", "答案就在你身边", "让你的情绪引导你", "别人将取决于你的选择", "放手吧", "是你该离开的时候了", "别分心", "你其实不在乎", "一年后这就不重要了", "这可能是非凡的", "数到十；再问一次", "表现得好像它已经成真了一样", "设定优先顺序将是过程中的必要部分", "发挥你的想像力", "这会很棒的", "为了确保做出最好的决定，保持冷静", "遵循指示", "寻找可能隐藏的东西", "别错过机会", "问你父亲"];
+
+// ====== 访问码验证 ======
+
+function getCode() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('code') || localStorage.getItem('ab_code') || '';
+}
+
+async function verifyCode() {
+  const input = document.getElementById('codeInput');
+  const code = input.value.trim().toUpperCase();
+  if (!code) {
+    showToast('请输入访问码', true);
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '验证中…';
+
+  try {
+    const resp = await fetch('/api/verify?code=' + encodeURIComponent(code));
+    const data = await resp.json();
+    if (data.valid) {
+      localStorage.setItem('ab_code', code);
+      showIntroAsNumberInput();
+    } else {
+      showToast(data.message || '访问码无效', true);
+      btn.disabled = false;
+      btn.textContent = '翻 开';
+    }
+  } catch (e) {
+    showToast('网络错误，请重试', true);
+    btn.disabled = false;
+    btn.textContent = '翻 开';
+  }
+}
+
+// 验证通过后：将输入区切换为数字输入
+function showIntroAsNumberInput() {
+  document.getElementById('introText').innerHTML =
+    '心中默念你最近困惑的问题<br>专注10秒<br>然后输入一个数字';
+  var area = document.querySelector('.input-area');
+  area.innerHTML =
+    '<input type="number" id="pageInput" min="1" max="412" placeholder="1–412">' +
+    '<br>' +
+    '<button class="btn" onclick="goToPage()">翻 开</button>' +
+    '<br>' +
+    '<button class="btn btn-random" onclick="randomPage()">随 机 翻 页</button>';
+  // 绑定回车
+  document.getElementById('pageInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') goToPage();
+  });
+  // 聚焦
+  document.getElementById('pageInput').focus();
+}
+
+// 页面加载时检查是否已有 code
+async function init() {
+  var code = getCode();
+  if (!code) return; // 没有 code，显示输入框让用户输入
+
+  // 有 code，后台验证
+  document.getElementById('loadingEl').classList.remove('hidden');
+  try {
+    var resp = await fetch('/api/verify?code=' + encodeURIComponent(code));
+    var data = await resp.json();
+    if (data.valid) {
+      showIntroAsNumberInput();
+      checkPageParam();
+    } else {
+      localStorage.removeItem('ab_code');
+    }
+  } catch (e) {
+    // 网络错误，有本地 code 就放行
+    showIntroAsNumberInput();
+    checkPageParam();
+  }
+  document.getElementById('loadingEl').classList.add('hidden');
+}
+
+// ====== 答案之书 ======
+
+function showPage(num) {
+  if (num < 1 || num > 412) {
+    showToast('请输入 1–412 之间的数字', true);
+    return;
+  }
+  var answer = ANSWERS[num - 1];
+  document.getElementById('pageNum').textContent = '— 第 ' + num + ' 页 —';
+  document.getElementById('answerText').textContent = answer;
+  document.getElementById('introPage').style.display = 'none';
+  var ap = document.getElementById('answerPage');
+  ap.classList.remove('show');
+  void ap.offsetWidth;
+  ap.classList.add('show');
+  history.pushState({page: num}, '', '?p=' + num);
+}
+
+function goToPage() {
+  var input = document.getElementById('pageInput');
+  var num = parseInt(input.value);
+  if (isNaN(num)) {
+    showToast('请输入一个数字', true);
+    return;
+  }
+  showPage(num);
+}
+
+function randomPage() {
+  var num = Math.floor(Math.random() * 412) + 1;
+  showPage(num);
+}
+
+function goHome() {
+  document.getElementById('answerPage').classList.remove('show');
+  document.getElementById('introPage').style.display = '';
+  document.getElementById('pageInput').value = '';
+  history.pushState({}, '', window.location.pathname);
+}
+
+function showToast(msg, isError) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  if (isError) t.classList.add('error');
+  else t.classList.remove('error');
+  setTimeout(function() { t.classList.remove('show'); t.classList.remove('error'); }, 2000);
+}
+
+function checkPageParam() {
+  var params = new URLSearchParams(window.location.search);
+  var p = parseInt(params.get('p'));
+  if (p >= 1 && p <= 412) {
+    showPage(p);
+  }
+}
+
+// Back button
+window.addEventListener('popstate', function(e) {
+  if (e.state && e.state.page) {
+    var num = e.state.page;
+    document.getElementById('pageNum').textContent = '— 第 ' + num + ' 页 —';
+    document.getElementById('answerText').textContent = ANSWERS[num - 1];
+    document.getElementById('introPage').style.display = 'none';
+    document.getElementById('answerPage').classList.add('show');
+  } else {
+    document.getElementById('answerPage').classList.remove('show');
+    document.getElementById('introPage').style.display = '';
+  }
+});
+
+// ====== 启动 ======
+
+// 码输入框：自动大写 + 回车提交
+document.getElementById('codeInput').addEventListener('input', function() {
+  this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+});
+document.getElementById('codeInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') verifyCode();
+});
+
+init();
+</script>
+
+</body>
+</html>
